@@ -48,8 +48,8 @@ def display_outputs(outputs, final_costs, selling_prices):
     )
     st.markdown('</div>', unsafe_allow_html=True)
     st.markdown('<h3 class="centered-title">FINAL INFORMATION FOR ALL COILS</h3>', unsafe_allow_html=True)
-    st.markdown(f"**Average TOTAL COST:** {avg_cost:.2f}")
-    st.markdown(f"**Average SELLING PRICE:** {avg_price:.2f}")
+    st.markdown(f"**Average TOTAL COST:** {avg_cost:.4f}")
+    st.markdown(f"**Average SELLING PRICE:** {avg_price:.4f}")
     # Show each coil's output side by side
     st.markdown('<h3 class="centered-title">Estimate Output by Coil</h3>', unsafe_allow_html=True)
     st.markdown('<div class="scroll-x-coils"><div class="scroll-x-coils-inner">', unsafe_allow_html=True)

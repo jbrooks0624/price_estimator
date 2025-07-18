@@ -1,0 +1,13 @@
+.venv
+/Price_Estimator.egg-info
+#pycache
+/Price_Estimator/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.pyw
+*.pyz
+*.pywz
+*.pyzw
+
+#dev container

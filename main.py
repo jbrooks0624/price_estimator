@@ -3,9 +3,9 @@ from process_steps import process_examine_coil, process_trimming, process_pickle
 
 def print_summary(final_cost, total_weight, master_coil_weight, margin):
     print('-------------SUMMARY------------')
-    print(f'TOTAL COST: {final_cost:.2f}')
+    print(f'TOTAL COST: {final_cost:.4f}')
     print(f'FINAL WEIGHT: {int(round(total_weight))} \n(SCRAP %: {((master_coil_weight - total_weight)/master_coil_weight) * 100:.4f}, SCRAP WEIGHT: {int(round(master_coil_weight - total_weight))})')
-    print(f'SELLING PRICE: {final_cost * (1 + margin/100):.2f}')
+    print(f'SELLING PRICE: {final_cost * (1 + margin/100):.4f}')
 
 
 def main(
@@ -34,22 +34,22 @@ def main(
     cut_cost: float = None,
     cut_weight: float = None,
     skip_cut: bool = False,
-    storage_start: float = 0.25,
-    storage_examine: float = 0.25,
-    storage_trimming: float = 0.25,
-    storage_pickle: float = 0.25,
-    storage_coating: float = 0.25,
-    storage_slitting: float = 0.25,
-    storage_cut: float = 0.25,
-    storage_end: float = 0.25,
-    freight_start: float = 400.0,
-    freight_examine: float = 400.0,
-    freight_trimming: float = 400.0,
-    freight_pickle: float = 400.0,
-    freight_coating: float = 400.0,
-    freight_slitting: float = 400.0,
-    freight_cut: float = 400.0,
-    freight_end: float = 400.0,
+    storage_start: float = 0.0,
+    storage_examine: float = 0.0,
+    storage_trimming: float = 0.0,
+    storage_pickle: float = 0.0,
+    storage_coating: float = 0.0,
+    storage_slitting: float = 0.0,
+    storage_cut: float = 0.0,
+    storage_end: float = 0.0,
+    freight_start: float = 0.0,
+    freight_examine: float = 0.0,
+    freight_trimming: float = 0.0,
+    freight_pickle: float = 0.0,
+    freight_coating: float = 0.0,
+    freight_slitting: float = 0.0,
+    freight_cut: float = 0.0,
+    freight_end: float = 0.0,
     margin: float = 15.0
 ):
     skip_slitting = bool(skip_slitting)
@@ -59,7 +59,7 @@ def main(
     print(f'FREIGHT AT START: {freight_start}')
     total_cost += freight_start
     running_weight = master_coil_weight
-    print(f'RUNNING COST AFTER START: {total_cost / running_weight:.2f}\n\n\n')
+    print(f'RUNNING COST AFTER START: {total_cost / running_weight:.4f}\n\n\n')
 
     print('--- EXAMINE COIL ---')
     examine_coil_cost_val, examine_coil_scrap, examine_calc_str = process_examine_coil(master_coil_weight, examine_coil_scrap_percent, examine_coil_cost, skip_examine_coil)
@@ -70,7 +70,7 @@ def main(
         total_cost += freight_examine
     total_cost += (master_coil_weight * examine_coil_cost_val)
     running_weight = master_coil_weight - examine_coil_scrap
-    print(f'RUNNING COST AFTER EXAMINE: {total_cost / running_weight:.2f}')
+    print(f'RUNNING COST AFTER EXAMINE: {total_cost / running_weight:.4f}')
     print("\n\n\n")
 
     print('--- TRIMMING ---')
@@ -82,7 +82,7 @@ def main(
         total_cost += freight_trimming
     total_cost += ((master_coil_weight - examine_coil_scrap) * trimming_cost_val)
     running_weight = master_coil_weight - examine_coil_scrap - trimming_scrap
-    print(f'RUNNING COST AFTER TRIMMING: {total_cost / running_weight:.2f}')
+    print(f'RUNNING COST AFTER TRIMMING: {total_cost / running_weight:.4f}')
     print("\n\n\n")
 
     print('--- PICKLE & OIL ---')
@@ -94,7 +94,7 @@ def main(
         total_cost += freight_pickle
     total_cost += ((master_coil_weight - examine_coil_scrap - trimming_scrap) * pickle_cost_val)
     running_weight = master_coil_weight - examine_coil_scrap - trimming_scrap - pickle_scrap
-    print(f'RUNNING COST AFTER PICKLE: {total_cost / running_weight:.2f}')
+    print(f'RUNNING COST AFTER PICKLE: {total_cost / running_weight:.4f}')
     print("\n\n\n")
 
     print('--- COATING ---')
@@ -106,11 +106,11 @@ def main(
         total_cost += freight_coating
     total_cost += ((master_coil_weight - examine_coil_scrap - trimming_scrap - pickle_scrap) * coating_cost_val)
     running_weight = master_coil_weight - examine_coil_scrap - trimming_scrap - pickle_scrap - coating_weight
-    print(f'RUNNING COST AFTER COATING: {total_cost / running_weight:.2f}')
+    print(f'RUNNING COST AFTER COATING: {total_cost / running_weight:.4f}')
     print("\n\n\n")
 
     print('--- SLITTING ---')
-    slitting_cost_val, slitting_weight, slitting_calc_str = process_slitting(master_coil_width, master_coil_weight, examine_coil_scrap, trimming_scrap, pickle_scrap, coating_weight, widths_per_cut, num_cuts_needed, slitting_scrap_percent, slitting_width_cropped, slitting_cost, skip_slitting)
+    slitting_cost_val, slitting_weight, slitting_calc_str = process_slitting(master_coil_width, master_coil_weight, examine_coil_scrap, trimming_scrap, pickle_scrap, coating_weight, widths_per_cut, False, num_cuts_needed, False, slitting_scrap_percent, slitting_width_cropped, slitting_cost, skip_slitting)
     if not skip_slitting:
         print(f'STORAGE AFTER SLITTING: {storage_slitting}')
         total_cost += storage_slitting * (master_coil_weight - examine_coil_scrap - trimming_scrap - pickle_scrap - coating_weight - slitting_weight)
@@ -119,7 +119,7 @@ def main(
 
     total_cost += ((master_coil_weight - examine_coil_scrap - trimming_scrap - pickle_scrap - coating_weight) * slitting_cost_val)
     running_weight = master_coil_weight - examine_coil_scrap - trimming_scrap - pickle_scrap - coating_weight - slitting_weight
-    print(f'RUNNING COST AFTER SLITTING: {total_cost / running_weight:.2f}')
+    print(f'RUNNING COST AFTER SLITTING: {total_cost / running_weight:.4f}')
     print("\n\n\n")
 
     print('--- CUT TO LENGTH ---')
@@ -130,9 +130,10 @@ def main(
         num_cuts_needed,
         total_weight_before_cut,
         master_coil_width,
-        cut_cost,
-        skip_cut
+        skip_cut,
+        cut_cost
     )
+    print(f"SKIP CUT: {skip_cut}")
     if not skip_cut:
         print(f'STORAGE AFTER CUT: {storage_cut}')
         total_cost += storage_cut * (total_weight_before_cut - cut_weight_val)
@@ -140,7 +141,7 @@ def main(
         total_cost += freight_cut
     total_cost += (total_weight_before_cut * cut_cost_val)
     running_weight = total_weight_before_cut - cut_weight_val
-    print(f'RUNNING COST AFTER CUT: {total_cost / running_weight:.2f}')
+    print(f'RUNNING COST AFTER CUT: {total_cost / running_weight:.4f}')
     print("\n\n\n")
     
 
